@@ -1,0 +1,26 @@
+Algorithms for Balanced Graph Colorings with Applications in Parallel Computing
+H. Lu, M. Halappanavar, D. Chavarría-Miranda, A. H. Gebremedhin, A. Panyala and A. Kalyanaraman, "Algorithms for Balanced Graph Colorings with Applications in Parallel Computing," in IEEE Transactions on Parallel and Distributed Systems, vol. 28, no. 5, pp. 1240-1256, 1 May 2017, doi: 10.1109/TPDS.2016.2620142.
+
+A Fast Heuristic for Graph B-Coloring Problem
+S. LABED, A. KOUT and S. CHIKHI, "A Fast Heuristic for Graph B-Coloring Problem," 2018 JCCO Joint International Conference on ICT in Education and Training, International Conference on Computing in Arabic, and International Conference on Geocomputing (JCCO: TICET-ICCA-GECO), Tunisia / Hammamet, Tunisia, 2018, pp. 1-6, doi: 10.1109/ICCA-TICET.2018.8726204.
+
+Graph Coloring Applications in Scheduling Courses using Welch-Powell Algorithm - A Case Study
+I. Rina, D. Sulistiowati and D. RaudhatulOktavi, "Graph Coloring Applications in Scheduling Courses using Welch-Powell Algorithm - A Case Study," 2022 International Symposium on Information Technology and Digital Innovation (ISITDI), Padang, Indonesia, 2022, pp. 131-135, doi: 10.1109/ISITDI55734.2022.9944511.
+
+TTS
+Examination Timetabling with Graph Coloring for Emerging Institutions
+O. S. Egwuche, "Examination Timetabling with Graph Coloring for Emerging Institutions," 2020 International Conference in Mathematics, Computer Engineering and Computer Science (ICMCECS), Ayobo, Nigeria, 2020, pp. 1-6, doi: 10.1109/ICMCECS47690.2020.246988.
+
+Graph Coloring based Scheduling Algorithm to automatically generate College Course Timetable
+P. Nandal, A. Satyawali, D. Sachdeva and A. S. Tomar, "Graph Coloring based Scheduling Algorithm to automatically generate College Course Timetable," 2021 11th International Conference on Cloud Computing, Data Science & Engineering (Confluence), Noida, India, 2021, pp. 210-214, doi: 10.1109/Confluence51648.2021.9377151.
+
+WFC
+Genetic-WFC: Extending Wave Function Collapse With Genetic Search
+R. Bailly and G. Levieux, "Genetic-WFC: Extending Wave Function Collapse With Genetic Search," in IEEE Transactions on Games, vol. 15, no. 1, pp. 36-45, March 2023, doi: 10.1109/TG.2022.3192930.
+
+Automatic Generation of Game Content using a Graph-based Wave Function Collapse Algorithm
+H. Kim, S. Lee, H. Lee, T. Hahn and S. Kang, "Automatic Generation of Game Content using a Graph-based Wave Function Collapse Algorithm," 2019 IEEE Conference on Games (CoG), London, UK, 2019, pp. 1-4, doi: 10.1109/CIG.2019.8848019.
+
+huh?
+Quantum Dynamics as Landau–Lifshitz-Type Dynamics and Random Wave Function Collapse
+I. Mayergoyz, "Quantum Dynamics as Landau–Lifshitz-Type Dynamics and Random Wave Function Collapse," in IEEE Magnetics Letters, vol. 8, pp. 1-4, 2017, Art no. 1207604, doi: 10.1109/LMAG.2017.2730162.

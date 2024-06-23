@@ -1,0 +1,59 @@
+n_sections = 3
+n_days_per_week = 5
+n_slots_per_day = 9
+n_subjects = 5
+n_faculty = 24
+n_electives = 2, 6, 3
+DBMS = 6, 1
+MI = 6, 1
+SE = 6, 1
+DBMS_LAB = 2, 2
+MI_LAB = 2, 2
+elective1 = 4
+HCI
+DA
+IOT
+AC
+000111000
+000000000
+111000000
+000000000
+000000000
+elective2 = 3
+GTA
+CNS
+BD
+000000000
+000111000
+000000000
+111000000
+000000000
+Dr.Geetha Dayalan      = DBMS, HCI
+Dr.Arti Arya           = MI, GTA
+Prof.Sheela Devi       = SE
+Prof.Lakshmeesha       = DA
+Dr.Vinodha             = IOT
+Dr.Annapurna D         = AC, CNS
+Dr.Sarasvathi V        = BD
+Prof.Sathyavani N L    = GTA
+Prof.Niveditha Kasturi = DBMS
+Dr.Pooja Agarwal       = MI
+Dr.Bharathi R          = BD, DA
+Dr.Prajwala T R        = DA
+Dr.Alpha Vijayan       = MI
+Dr.Sudeepa Roy Dey     = DA, SE
+Prof.Animesh Giri      = BD, SE
+Dr.Kamatchi Priya      = GTA
+Dr.Mannar Mannan       = DBMS
+Prof.Rohith Vaidya     = SE
+Dr.Prema               = MI
+Prof.Smrithi           = DBMS
+Prof.Shilpa S          = DBMS
+Prof.Kokila            = MI
+Prof.Umme Hanni        = DBMS
+Prof.Divya Ebenezer    = MI, SE
+000000000
+000000000
+000000111
+000000000
+000000000
