@@ -1,4 +1,4 @@
-from states import SuperState, CollapsedState, Section, Table_T, GroupID_T
+from states import SuperState, CollapsedState, Teacher, Subject, Section, Table_T, GroupID_T
 import states
 import constraints
 import numpy as np
@@ -52,20 +52,25 @@ def propagate_constraints(table, dims, ndx, subjects):
     for state in modified_states:
         state.calc_entropy()
 
+def collapse_state(table, dims, ndx, min_cls, subjects):
+    sec, day, slot = ndx
+    table[sec][day][slot] = CollapsedState(min_cls)
+    if min_cls == (0,0):
+        return
+    facultyID, subjectID = min_cls
+    sec_subj = Section.at(sec).subjects
+    for subjID in states.block_subjects[subjectID]:
+        sec_subj[subjID] = sec_subj.get(subjID,0) + 1
+    Teacher.at(facultyID).availability[day][slot] = (sec, Subject.at(subjectID))
+
+
 def iterate(table, dims, subjects):
     ndx = get_collapsable_state(table, dims)
     if ndx is None:
         return None
     sec, day, slot = ndx
     min_cls = get_min_cls(table[sec][day][slot], slot)
-    # collapse_state
-    if min_cls != (0,0):
-        subjectID = min_cls[1]
-        sec_subj = Section.at(sec).subjects
-        for subjID in states.block_subjects[subjectID]:
-            sec_subj[subjID] = sec_subj.get(subjID,0) + 1
-    table[sec][day][slot] = CollapsedState(min_cls)
-
+    collapse_state(table, dims, ndx, min_cls, subjects)
 
     if min_cls != (0,0):
         propagate_constraints(table, dims, ndx, subjects)
