@@ -43,6 +43,17 @@ def print_tt_stats(tt, dims, groupings, block_subjects):
             print(f'{groupings[grpID]}: {count}', end=', ')
         print()
 
+def print_tt_faculty(tt, dims, faculty:list[Teacher]):
+    n_sections, n_days_per_week, n_slots_per_day = dims
+    for fac in faculty:
+        print(fac.name, fac.id)
+        for row in fac.availability:
+            print('|'.join(map(
+                lambda x:x.center(10)
+                .replace('0'.center(10), ' '.center(10))
+                .replace('1'.center(10),('X'*8).center(10)), map(str,row)
+            )))
+    
 
 def score_faculty(blocked_slots, elective_slots, dims, teachers:list[Teacher], sections:list[Section]):
     n_sections, n_days_per_week, n_slots_per_day = dims
