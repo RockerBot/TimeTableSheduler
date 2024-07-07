@@ -1,0 +1,45 @@
+{'state': -_[176418], 'ndx': (0, 1, 7)}
+****************************************************************************************************0
+SECTION 1
+day 0:   OOAD_LAB    CC_LAB       CC       elec-1     elec-1     elec-1      OOAD    -_[176418] -_[230418] 
+day 1:      CD       CC_LAB       CC       elec-2     elec-2     elec-2      OOAD        -      -_[230418] 
+day 2:    elec-1     elec-1     elec-1       CC         CD        OOAD       OOAD        -      -_[230418] 
+day 3:    elec-2     elec-2     elec-2       CC         CD        OOAD        -          -      -_[230418] 
+day 4:      CD      OOAD_LAB      CC         CC         CD         CD         -         OOAD    -_[230418] 
+SECTION 2
+day 0:      CD      OOAD_LAB     OOAD      elec-1     elec-1     elec-1       CC         -      _[230400]  
+day 1:    CC_LAB    OOAD_LAB     OOAD      elec-2     elec-2     elec-2       -          -      _[230400]  
+day 2:    elec-1     elec-1     elec-1       CD         CC         CD         -          -      _[230400]  
+day 3:    elec-2     elec-2     elec-2       CD         CC         CD        OOAD        -      _[230400]  
+day 4:    CC_LAB       CD        OOAD       OOAD        CC         CC        OOAD        CC     _[230400]  
+SECTION 3
+day 0:    CC_LAB       CD         CD       elec-1     elec-1     elec-1       -          -      _[230400]  
+day 1:   OOAD_LAB      CD         CD       elec-2     elec-2     elec-2       CC         -      _[230400]  
+day 2:    elec-1     elec-1     elec-1      OOAD       OOAD        CC         CC         -      _[230400]  
+day 3:    elec-2     elec-2     elec-2      OOAD       OOAD        CC         CC         -      _[230400]  
+day 4:   OOAD_LAB    CC_LAB       CD         CD        OOAD       OOAD        CC         -      _[230400]  
+{'state': -_[176418], 'ndx': (0, 0, 7)}
+****************************************************************************************************0
+SECTION 1
+day 0:   OOAD_LAB    CC_LAB       CC       elec-1     elec-1     elec-1      OOAD        -      _[230400]  
+day 1:      CD       CC_LAB       CC       elec-2     elec-2     elec-2      OOAD        -      _[230400]  
+day 2:    elec-1     elec-1     elec-1       CC         CD        OOAD       OOAD        -      _[230400]  
+day 3:    elec-2     elec-2     elec-2       CC         CD        OOAD        -          -      _[230400]  
+day 4:      CD      OOAD_LAB      CC         CC         CD         CD         -         OOAD    _[230400]  
+SECTION 2
+day 0:      CD      OOAD_LAB     OOAD      elec-1     elec-1     elec-1       CC         -      _[230400]  
+day 1:    CC_LAB    OOAD_LAB     OOAD      elec-2     elec-2     elec-2       -          -      _[230400]  
+day 2:    elec-1     elec-1     elec-1       CD         CC         CD         -          -      _[230400]  
+day 3:    elec-2     elec-2     elec-2       CD         CC         CD        OOAD        -      _[230400]  
+day 4:    CC_LAB       CD        OOAD       OOAD        CC         CC        OOAD        CC     _[230400]  
+SECTION 3
+day 0:    CC_LAB       CD         CD       elec-1     elec-1     elec-1       -          -      _[230400]  
+day 1:   OOAD_LAB      CD         CD       elec-2     elec-2     elec-2       CC         -      _[230400]  
+day 2:    elec-1     elec-1     elec-1      OOAD       OOAD        CC         CC         -      _[230400]  
+day 3:    elec-2     elec-2     elec-2      OOAD       OOAD        CC         CC         -      _[230400]  
+day 4:   OOAD_LAB    CC_LAB       CD         CD        OOAD       OOAD        CC         -      _[230400]  
+{'state': _[230400], 'ndx': (2, 4, 8)}
+****************************************************************************************************0
+IMPOSSIBLE STATE REACHED
+
+Process finished with exit code 0
