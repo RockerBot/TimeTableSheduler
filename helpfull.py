@@ -9,7 +9,7 @@ def print_tt(tt, dims, elective_slots, blocked_slots, ndx=None):
     for section_i in range(n_sections):
         print('\rSECTION', section_i + 1)
         for day_j in range(n_days_per_week):
-            print("\r","-"*250,"\nday", day_j, end=':  ')
+            print("\r","-"*230,"\nday", day_j, end=':  ')
             for slot_k in range(n_slots_per_day):
                 state = tt[section_i][day_j][slot_k]
                 clr = ('\033[39m', '\033[92m')[isinstance(state, CollapsedState)]
@@ -25,7 +25,8 @@ def print_tt(tt, dims, elective_slots, blocked_slots, ndx=None):
                 else:
                     print(f"{clr}{state:-{padding}}\033[39m", end=' ')
                 if slot_k%3==2:
-                    print("\n        ",end='')
+                    print(end='\n        ')
+    print(end='\r')
 
 def print_tt_stats(tt, dims, groupings, block_subjects):
     n_sections, n_days_per_week, n_slots_per_day = dims
@@ -39,23 +40,24 @@ def print_tt_stats(tt, dims, groupings, block_subjects):
                 facultyID, subjID = state.cls
                 grpID = facultyID, 0 if subjID == 0 else block_subjects[subjID][0]
                 sec_cls[grpID] = sec_cls.get(grpID, 0) + 1
-        for grpID,count in sec_cls.items():
+        for grpID, count in sorted(sec_cls.items(), key=lambda x:x[0][1]):
             print(f'{groupings[grpID]}: {count}', end=', ')
         print()
 
 def print_tt_faculty(tt, dims, faculty:list[Teacher]):
     n_sections, n_days_per_week, n_slots_per_day = dims
+    faculty_padding = 16
     for fac in faculty:
         print(fac.name, fac.id)
         for row in fac.availability:
             print('|'.join(map(
-                lambda x:x.center(10)
-                .replace('0'.center(10), ' '.center(10))
-                .replace('1'.center(10),('X'*8).center(10)), map(str,row)
+                lambda x:x.center(faculty_padding)
+                .replace('0'.center(faculty_padding), ' '.center(faculty_padding))
+                .replace('1'.center(faculty_padding),('X'*(faculty_padding-2)).center(faculty_padding)), map(str,row)
             )))
     
 
-def score_faculty(blocked_slots, elective_slots, dims, teachers:list[Teacher], sections:list[Section]):
+def score_faculty(blocked_slots, elective_slots, dims, elec_faculty:list[set[Teacher]], teachers:list[Teacher], sections:list[Section]):
     n_sections, n_days_per_week, n_slots_per_day = dims
 
     for i in range(n_days_per_week):
@@ -69,6 +71,18 @@ def score_faculty(blocked_slots, elective_slots, dims, teachers:list[Teacher], s
                 teacher.availability[i][j] = 1
             for section in sections:
                 section.availability[i][j] = 1
+    
+    for i in range(n_days_per_week):
+        for j in range(1, n_slots_per_day-1):
+            for k,elec in enumerate(elective_slots):
+                if elec[i][j-1]: # ie elective before current index
+                    for fac in elec_faculty[k]:
+                        fac.availability[i][j] = 1
+                if elec[i][j+1]: # ie elective after current index
+                    for fac in elec_faculty[k]:
+                        fac.availability[i][j] = 1
+                    
+
     
     for teacher in teachers:
         teacher.score = (
@@ -86,8 +100,8 @@ def create_groupings(teachers:list[Teacher], groupings):
             subj.groupIDs |= {key}
     groupings[(0,0)] = 0
 
-def setup(dims, blocked_slots, elective_slots, teachers:list[Teacher], sections, subjects, groupings:dict[GroupID_T, Group_T]) -> Table_T:
-    score_faculty(blocked_slots, elective_slots, dims, teachers, sections)
+def setup(dims, blocked_slots, elective_slots, elec_faculty, teachers:list[Teacher], sections, subjects, groupings:dict[GroupID_T, Group_T]) -> Table_T:
+    score_faculty(blocked_slots, elective_slots, dims, elec_faculty, teachers, sections)
     create_groupings(teachers, groupings)
     n_sections, n_days_per_week, n_slots_per_day = dims
     table: Table_T = [
