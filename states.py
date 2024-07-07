@@ -6,7 +6,7 @@ Group_T = tuple['Teacher', 'Subject']
 GroupID_T = tuple[FacultyID_T,SubjectID_T]
 Table_T = list[list[list['SuperState']]]
 
-ENTROPY_MAX = 1_000_000_000
+ENTROPY_MAX = 1_000_000_000_000
 groupings: dict[GroupID_T, Group_T] = {}
 
 block_subjects:dict[SubjectID_T,list[SubjectID_T]] = {} #dict [subjectID] -> list of subjectIDs corresponding to the same subject, 
@@ -98,7 +98,7 @@ class Teacher:
         return hash(f'Teacher{self.id}')
     
     def __repr__(self):
-        return f'T{self.id}'#[{self.subjects}]'
+        return f'{chr(65+self.id)}'#[{self.subjects}]'
 
     @classmethod
     def at(cls, index) -> 'Teacher':
@@ -179,5 +179,5 @@ class SuperState(State):
     def __repr__(self):
         # return str(self.ID)        
         return '_'.join(
-            f'{cls[0]}{cls[1]}' for cls in self.classes
+            f'{chr(65+cls[0])}{cls[1]}' for cls in sorted(self.classes)
         ) #+ f"_[{self.entropy}]"
