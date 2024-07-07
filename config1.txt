@@ -1,4 +1,4 @@
-n_sections = 3
+n_sections = 10
 n_days_per_week = 5
 n_slots_per_day = 9
 n_subjects = 5
@@ -28,32 +28,56 @@ BD
 000000000
 111000000
 000000000
-Dr.Geetha Dayalan      = DBMS, HCI
-Dr.Arti Arya           = MI, GTA
+Dr.Geetha Dayalan      = DBMS, DBMS_LAB, HCI
+Prof.Niveditha Kasturi = DBMS, DBMS_LAB
+Dr.Mannar Mannan       = DBMS, DBMS_LAB
+Prof.Smrithi           = DBMS, DBMS_LAB
+Prof.Shilpa S          = DBMS, DBMS_LAB
+Prof.Umme Hanni        = DBMS, DBMS_LAB
+Dr.Arti Arya           = MI, MI_LAB, GTA
+Dr.Pooja Agarwal       = MI, MI_LAB
+Dr.Alpha Vijayan       = MI, MI_LAB
+Dr.Prema               = MI, MI_LAB
+Prof.Kokila            = MI, MI_LAB
+Prof.Divya Ebenezer    = MI, MI_LAB, SE
+Prof.Sheela Devi       = SE
+Dr.Sudeepa Roy Dey     = DA, SE
+Prof.Animesh Giri      = BD, SE
+Prof.Rohith Vaidya     = SE
+Prof.Lakshmeesha       = DA
+Dr.Vinodha             = IOT
+Dr.Annapurna D         = AC, CNS
+Dr.Sarasvathi V        = BD
+Prof.Sathyavani N L    = GTA
+Dr.Bharathi R          = BD, DA
+Dr.Prajwala T R        = DA
+Dr.Kamatchi Priya      = GTA
+000000001
+000000001
+000000111
+000000001
+000000001
+Dr.Geetha Dayalan      = DBMS, DBMS_LAB, HCI
+Dr.Arti Arya           = MI, MI_LAB, GTA
 Prof.Sheela Devi       = SE
 Prof.Lakshmeesha       = DA
 Dr.Vinodha             = IOT
 Dr.Annapurna D         = AC, CNS
 Dr.Sarasvathi V        = BD
 Prof.Sathyavani N L    = GTA
-Prof.Niveditha Kasturi = DBMS
-Dr.Pooja Agarwal       = MI
+Prof.Niveditha Kasturi = DBMS, DBMS_LAB
+Dr.Pooja Agarwal       = MI, MI_LAB
 Dr.Bharathi R          = BD, DA
 Dr.Prajwala T R        = DA
-Dr.Alpha Vijayan       = MI
+Dr.Alpha Vijayan       = MI, MI_LAB
 Dr.Sudeepa Roy Dey     = DA, SE
 Prof.Animesh Giri      = BD, SE
 Dr.Kamatchi Priya      = GTA
-Dr.Mannar Mannan       = DBMS
+Dr.Mannar Mannan       = DBMS, DBMS_LAB
 Prof.Rohith Vaidya     = SE
-Dr.Prema               = MI
-Prof.Smrithi           = DBMS
-Prof.Shilpa S          = DBMS
-Prof.Kokila            = MI
-Prof.Umme Hanni        = DBMS
-Prof.Divya Ebenezer    = MI, SE
-000000000
-000000000
-000000111
-000000000
-000000000
+Dr.Prema               = MI, MI_LAB
+Prof.Smrithi           = DBMS, DBMS_LAB
+Prof.Shilpa S          = DBMS, DBMS_LAB
+Prof.Kokila            = MI, MI_LAB
+Prof.Umme Hanni        = DBMS, DBMS_LAB
+Prof.Divya Ebenezer    = MI, MI_LAB, SE
