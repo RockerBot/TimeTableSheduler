@@ -1,22 +1,24 @@
-from states import CollapsedState, SuperState, Teacher, Subject, Section, Table_T, GroupID_T, SubjectID_T
+from states import CollapsedState, SuperState, Teacher, Subject, Section, Table_T, GroupID_T, SubjectID_T, FacultyID_T
 import states
 
 to_be_propagated:list[tuple[
     tuple[int,int,int],
-    SubjectID_T
+    tuple[FacultyID_T,SubjectID_T]
 ]] = []
-
+#TODO Add constraint, if a teacher is assigned to a class, remove that many availability slots, ie always check when assigning a teacher if they have enough availability for another subject
 
 def remove_invalids(state: 'SuperState', invalidIDs: set[GroupID_T], ndx, modified_states: set[SuperState]):
     # only_block_subjects
     global to_be_propagated
     blk_states = state.classes&invalidIDs&states.block_grpIDs
-    to_be_propagated.extend((ndx, x[1]) for x in blk_states)
+    # to_be_propagated.extend((ndx, x[1]) for x in blk_states)
+    to_be_propagated.extend((ndx, x) for x in blk_states)
     state.classes -= invalidIDs
     modified_states.add(state)
 
 
 def remove_invalid_blocks(table: Table_T, dims, modified_states: set[SuperState]):
+    # return
     n_sections, n_days_per_week, n_slots_per_day = dims
     visited:set[GroupID_T] = set()
     while(len(to_be_propagated)>1):
@@ -30,7 +32,9 @@ def remove_invalid_blocks(table: Table_T, dims, modified_states: set[SuperState]
             then add the nbrs to the to_be_propagated stack
         if there was nothing to 'handle', dont add to stack
         """
-        ndx, subjID = state_info
+        ndx, cls = state_info
+        # subjID = cls
+        facID, subjID = cls
         sec, day, slot = ndx
         subj = Subject.at(subjID) # 6
         blk_subjs = states.block_subjects[subjID]
@@ -44,10 +48,12 @@ def remove_invalid_blocks(table: Table_T, dims, modified_states: set[SuperState]
                 if not isinstance(state, SuperState):
                     continue
                 nbr_subjID = blk_subjs[i]
-                invalidIDs = Subject.at(nbr_subjID).groupIDs
+                # invalidIDs = Subject.at(nbr_subjID).groupIDs
+                invalidIDs = {(facID, nbr_subjID)}
                 if len(state.classes&invalidIDs) == 0:
                     continue
-                to_be_propagated.append(( (sec,day,slot_i), nbr_subjID ))
+                # to_be_propagated.append(( (sec,day,slot_i), nbr_subjID ))
+                to_be_propagated.append(( (sec,day,slot_i), (facID,nbr_subjID) ))
                 state.classes -= invalidIDs
                 modified_states.add(state)
         
@@ -58,10 +64,12 @@ def remove_invalid_blocks(table: Table_T, dims, modified_states: set[SuperState]
                 if not isinstance(state, SuperState):
                     continue
                 nbr_subjID = blk_subjs[i]
-                invalidIDs = Subject.at(nbr_subjID).groupIDs
+                # invalidIDs = Subject.at(nbr_subjID).groupIDs
+                invalidIDs = {(facID, nbr_subjID)}
                 if len(state.classes&invalidIDs) == 0:
                     continue
-                to_be_propagated.append(( (sec,day,slot_i), nbr_subjID ))
+                # to_be_propagated.append(( (sec,day,slot_i), nbr_subjID ))
+                to_be_propagated.append(( (sec,day,slot_i), (facID,nbr_subjID) ))
                 state.classes -= invalidIDs
                 modified_states.add(state)
 
@@ -69,17 +77,20 @@ def remove_invalid_blocks(table: Table_T, dims, modified_states: set[SuperState]
         
 
 
-def teachers_unavailable(table: Table_T, dims, teachers:list[Teacher], modified_states):
+def teachers_unavailable(table: Table_T, dims, blocked_slots, teachers:list[Teacher], modified_states):
     """removes states where the faculty is not available"""
     n_sections, n_days_per_week, n_slots_per_day = dims
     for day_i in range(n_days_per_week):
         for slot_j in range(n_slots_per_day):
+            if blocked_slots[day_i][slot_j]:
+                continue
             invalidIDs = set()
             for faculty in teachers:
                 val = faculty.availability[day_i][slot_j]
                 if not val:
                     continue
                 invalidIDs |= faculty.groupIDs
+            if len(invalidIDs) == 0: continue
             for sec_k in range(n_sections):
                 state = table[sec_k][day_i][slot_j]
                 if not isinstance(state, SuperState):
@@ -98,8 +109,10 @@ def impossible_blocks(table: Table_T, dims, blocked_slots, modified_states):
         for subj in states.only_block_subjects:
             if 0 <= (slot_k - subj.blk_index) <= n_slots_per_day-subj.min_blk_sz:
                 continue
-            invalidIDs_1 |= subj.groupIDs
+            invalidIDs_1 |= subj.groupIDs # blksubjs at the end and begining slots
         for day_j in range(n_days_per_week):
+            if blocked_slots[day_j][slot_k]:
+                continue
             invalidIDs_2 = set()|invalidIDs_1
             for subj in states.only_block_subjects:
                 min_slot = max(0,slot_k - subj.blk_index)
@@ -132,8 +145,11 @@ def one_teacher_per_subject_per_section(table: Table_T, dims, ndx, collapsed_sta
     """
     n_sections, n_days_per_week, n_slots_per_day = dims
     sec, day, slot = ndx
-    subjectID = collapsed_state.cls[1]
-    invalidIDs = Subject.at(subjectID).groupIDs - {collapsed_state.cls}
+    facultyID, subjectID = collapsed_state.cls
+    invalidIDs = set()
+    for subjID in states.block_subjects[subjectID]:
+        invalidIDs |= Subject.at(subjID).groupIDs - {(facultyID, subjID)}
+    # invalidIDs = Subject.at(subjectID).groupIDs - {collapsed_state.cls}
     for d in range(n_days_per_week):
         for p in range(n_slots_per_day):
             state = table[sec][d][p]
@@ -174,7 +190,7 @@ def min_block_slots(table: Table_T, dims, ndx, collapsed_state: CollapsedState, 
     "subjects requiring group slots ie consecutive slots"
     n_sections, n_days_per_week, n_slots_per_day = dims
     sec, day, slot = ndx
-    subjectID = collapsed_state.cls[1]
+    facultyID, subjectID = collapsed_state.cls
     subject = Subject.at(subjectID)
     slot_base = slot-subject.blk_index
     blk_subj_list = states.block_subjects[subjectID]
@@ -185,7 +201,7 @@ def min_block_slots(table: Table_T, dims, ndx, collapsed_state: CollapsedState, 
             state = table[sec][day][slot_i]
             if not isinstance(state, SuperState):
                 continue
-            invalidIDs = state.classes - Subject.at(blk_subj_list[i]).groupIDs
+            invalidIDs = state.classes - {(facultyID,blk_subj_list[i])}
             remove_invalids(state, invalidIDs, (sec,day,slot_i), modified_states)
     
     # assuming slot_base as a wall, therefore update block states
@@ -233,7 +249,7 @@ def soft_constraints(table: Table_T, dims, ndx, subjects, modified_states):
     first_slot_diff_subj(table, dims, ndx, collapsed_state, modified_states)
 
 def pre_constraints(table: Table_T, dims, blocked_slots, teachers:list[Teacher], subjects:list[Subject], modified_states):
-    teachers_unavailable(table, dims, teachers, modified_states)
+    teachers_unavailable(table, dims, blocked_slots, teachers, modified_states)
     impossible_blocks(table, dims, blocked_slots, modified_states)
             
 
