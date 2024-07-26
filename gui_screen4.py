@@ -5,10 +5,17 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen
 from kivy.uix.scrollview import ScrollView
-from kivy.uix.widget import Widget
 
 from gui_helpfull import add_widgets, add_colour
 
+default_btn_args = {
+    'size_hint': (None, 1),
+    'width': dp(70)
+}
+
+
+def update_text_size(instance, value):
+    instance.text_size = instance.size
 
 class CustomScrollView(ScrollView):
     def __init__(self, **kwargs):
@@ -41,23 +48,29 @@ class WFCScreen(Screen):
         self.teacher_dict = None
 
         self.pass_data = None
+        self.run_algo = None
         self.sections = []
         self.layout = BoxLayout(orientation='vertical', spacing=10, padding=10)
         self.layout_nav = BoxLayout(orientation='horizontal', size_hint_y=None, height=dp(40))
         self.layout_sections = BoxLayout(orientation='vertical', size_hint_y=None)
+        self.layout_options = BoxLayout(orientation='horizontal', spacing=10)
 
-        self.button_back = Button(text='Back', size_hint=(None, 1), width=dp(70))
-        self.button_continue = Button(text='Continue', size_hint=(None, 1), width=dp(70), pos_hint={'right': 1})
+        self.button_back = Button(text='Back', **default_btn_args)
+        self.button_continue = Button(text='Continue', disabled=True, **default_btn_args)
+        self.button_generate = Button(text='Generate', **default_btn_args)
 
         self.scroll_view_sections = CustomScrollView(size_hint=(1, 1))
 
         self.layout_sections.bind(minimum_height=self.layout_sections.setter('height'))
         self.button_back.bind(on_press=self.goto_prev_screen)
         self.button_continue.bind(on_press=self.goto_next_screen)
+        self.button_generate.bind(on_press=self.run_wfc)
+
+        self.layout_options.add_widget(self.button_generate)
 
         add_widgets(
             self.button_back,
-            Widget(size_hint=(1, 1)),
+            self.layout_options,
             self.button_continue,
             to=self.layout_nav
         )
@@ -70,7 +83,7 @@ class WFCScreen(Screen):
         self.add_widget(self.layout)
         # add_colour(self.scroll_view_sections, (1,0,0,1))
 
-    def set_data(self, n_sections, n_days, n_slots, n_electives, subject_list, teacher_dict):
+    def set_data(self, n_sections, n_days, n_slots, n_electives, subject_list, teacher_dict, callback):
         self.layout_sections.clear_widgets()
         self.n_sections = n_sections
         self.n_days = n_days
@@ -78,6 +91,7 @@ class WFCScreen(Screen):
         self.n_electives = n_electives
         self.subject_list = subject_list
         self.teacher_dict = teacher_dict
+        self.run_algo = callback
 
         self.scroll_view_sections.set_scrl_wdth(0.5/n_sections)
 
@@ -86,7 +100,11 @@ class WFCScreen(Screen):
             grid = GridLayout(cols=self.n_slots, size_hint=(1, None), height=dp(95*self.n_days + 20))
             for row in range(self.n_slots):
                 for col in range(self.n_days):
-                    btn = Button(text=f'R{row + 1}C{col + 1}', size_hint_y=None, height=dp(95))
+                    btn = Button(text='',
+                                 size_hint_y=None, height=dp(95), padding=5,
+                                 halign='center', valign='middle')
+                    btn.text_size = btn.size
+                    btn.bind(size=update_text_size)
                     grid.add_widget(btn)
             self.sections.append(grid)
 
@@ -101,6 +119,15 @@ class WFCScreen(Screen):
     def goto_next_screen(self, instance):
         return
         self.manager.current = 'output'
+
+    def run_wfc(self, instance):
+        print("running wfc")
+        self.run_algo(self)
+
+    def set_states(self, modified_states):
+        print("---------------------------------")
+        for ndx, st in modified_states:
+            self.set_wfc_state(ndx, str(st))
 
     def set_wfc_state(self, ndx, text):
         sec, day, slot = ndx

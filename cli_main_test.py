@@ -1,5 +1,7 @@
+import time
+
 from states import Teacher, Subject, Section, Table_T
-from helpfull import print_tt, print_tt_stats, print_tt_faculty, setup
+from helpfull import print_to_csv, print_tt, print_tt_stats, print_tt_faculty, setup
 import states
 import WFC
 
@@ -16,7 +18,7 @@ def init_subjects(subjects_dict:dict) -> list[Subject]:
         subjects.extend(subjs)
     return subjects
 
-def init_faculty(dims, faculty_dict:dict, subjects_dict:dict[str,list[Subject]], elec_faculty) -> tuple[list[Teacher], list[set[Teacher]]]:
+def init_faculty(dims, faculty_dict:dict, subjects_dict:dict[str,list[Subject]], elec_faculty) -> list[Teacher]:
     n_sections, n_days_per_week, n_slots_per_day = dims
 
     teachers = []
@@ -58,36 +60,34 @@ def init_section(dims, subjects):
     return sections
 
 
-def main_loop(table, dims, elective_slots, blocked_slots, faculty, subjects):
+def main_loop(table, dims, elective_slots, blocked_slots, faculty, subjects, callback):
     collapseable_slot = (0,0,0)
     iteration_count = 0
     while True:
         try:
-            collapseable_slot = WFC.iterate(table, dims, subjects)
+            collapseable_slot = WFC.iterate(table, dims, subjects, callback)
         except AssertionError as e:
             print(e)
             print_tt(table, dims, elective_slots, blocked_slots)
             print_tt_stats(table, dims, states.groupings, states.block_subjects)
             print_tt_faculty(table, dims, faculty)
+            print_to_csv(table, dims, elective_slots, blocked_slots, faculty)
             raise e
         if collapseable_slot is None:
             print("The Wave Function has Collapsed")
             print_tt(table, dims, elective_slots, blocked_slots)
             print_tt_stats(table, dims, states.groupings, states.block_subjects)
             print_tt_faculty(table, dims, faculty)
+            print_to_csv(table, dims, elective_slots, blocked_slots, faculty)
             break
-        # print_tt(table, dims, elective_slots, blocked_slots, collapseable_slot)
-        # print(end=f"\n{'*' * 100}{(iteration_count:=iteration_count+1)}\n")
+        print_tt(table, dims, elective_slots, blocked_slots, collapseable_slot)
+        print(end=f"\n{'*' * 100}{(iteration_count:=iteration_count+1)}\n")
         print(collapseable_slot, table[collapseable_slot[0]][collapseable_slot[1]][collapseable_slot[2]])
+        # time.sleep(0.1)
         # input("next?: ")
 
 
-
-def input_file():
-    import os
-    # file_name = 'config_test.txt'
-    file_name = 'config1.txt'
-    assert file_name in os.listdir(), "file not present"
+def input_file(file_name):
     with open(file_name, 'r') as file:
         n_sections      = int(file.readline().split('=')[-1])
         n_days_per_week = int(file.readline().split('=')[-1])
@@ -155,17 +155,17 @@ def input_file():
     )
 
 
-def main():    
-    (n_sections, n_days_per_week, n_slots_per_day, 
+def main(n_sections, n_days_per_week, n_slots_per_day, 
         n_subjects, n_faculty, #? not required
         n_electives, 
         subjects_dict, 
         electives, elective_slots, 
         faculty_dict, 
-        blocked_slots
-    ) = input_file()
+        blocked_slots,
+        callback
+    ):
     dims = n_sections, n_days_per_week, n_slots_per_day
-
+    print("main")
     elec_faculty = []
     for i in range(n_electives[0]):
         elec_name = f'e{i+1}'
@@ -203,7 +203,7 @@ def main():
                     blocked_slots[i][j] = 1
                     break
 
-    WFC.init(table, dims, blocked_slots, teachers, subjects)
+    WFC.init(table, dims, blocked_slots, teachers, subjects, callback)
     
     print(states.groupings)
     for cls,val in states.groupings.items():
@@ -217,9 +217,13 @@ def main():
     print_tt(table, dims, elective_slots, blocked_slots)
     print("="*100)
 
-    main_loop(table, dims, elective_slots, blocked_slots, teachers, subjects)
+    main_loop(table, dims, elective_slots, blocked_slots, teachers, subjects, callback)
 
 
 if __name__ == '__main__':
-    # input_file()
-    main()
+    import os
+
+    # file_name = 'config1.txt'
+    file_name = 'config_test.txt'
+    assert file_name in os.listdir(), "file not present"
+    main(*input_file(file_name), lambda x:None)
