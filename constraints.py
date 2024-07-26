@@ -1,4 +1,4 @@
-from states import CollapsedState, SuperState, Teacher, Subject, Section, Table_T, GroupID_T, SubjectID_T, FacultyID_T
+from states import CollapsedState, SuperState, Teacher, Subject, Section, Table_T, GroupID_T, SubjectID_T, FacultyID_T, Index_T
 import states
 
 to_be_propagated:list[tuple[
@@ -7,21 +7,21 @@ to_be_propagated:list[tuple[
 ]] = []
 #TODO Add constraint, if a teacher is assigned to a class, remove that many availability slots, ie always check when assigning a teacher if they have enough availability for another subject
 
-def remove_invalids(state: 'SuperState', invalidIDs: set[GroupID_T], ndx, modified_states: set[SuperState]):
+def remove_invalids(state: 'SuperState', invalidIDs: set[GroupID_T], ndx, modified_states: set[tuple[Index_T, SuperState]]):
     # only_block_subjects
     global to_be_propagated
     blk_states = state.classes&invalidIDs&states.block_grpIDs
     # to_be_propagated.extend((ndx, x[1]) for x in blk_states)
     to_be_propagated.extend((ndx, x) for x in blk_states)
     state.classes -= invalidIDs
-    modified_states.add(state)
+    modified_states.add((ndx, state))
 
 
-def remove_invalid_blocks(table: Table_T, dims, modified_states: set[SuperState]):
+def remove_invalid_blocks(table: Table_T, dims, modified_states: set[tuple[Index_T, SuperState]]):
     # return
     n_sections, n_days_per_week, n_slots_per_day = dims
     visited:set[GroupID_T] = set()
-    while(len(to_be_propagated)>1):
+    while len(to_be_propagated):
         state_info = to_be_propagated.pop(0)
         if state_info in visited:
             continue
@@ -55,7 +55,7 @@ def remove_invalid_blocks(table: Table_T, dims, modified_states: set[SuperState]
                 # to_be_propagated.append(( (sec,day,slot_i), nbr_subjID ))
                 to_be_propagated.append(( (sec,day,slot_i), (facID,nbr_subjID) ))
                 state.classes -= invalidIDs
-                modified_states.add(state)
+                modified_states.add(((sec, day, slot_i), state))
         
         for i in range(blk_ofst+1, subj.min_blk_sz): # states in block with a higher blk index
             slot_i = slot_base + i
@@ -71,7 +71,7 @@ def remove_invalid_blocks(table: Table_T, dims, modified_states: set[SuperState]
                 # to_be_propagated.append(( (sec,day,slot_i), nbr_subjID ))
                 to_be_propagated.append(( (sec,day,slot_i), (facID,nbr_subjID) ))
                 state.classes -= invalidIDs
-                modified_states.add(state)
+                modified_states.add(((sec, day, slot_i), state))
 
 
         
@@ -150,6 +150,8 @@ def one_teacher_per_subject_per_section(table: Table_T, dims, ndx, collapsed_sta
     for subjID in states.block_subjects[subjectID]:
         invalidIDs |= Subject.at(subjID).groupIDs - {(facultyID, subjID)}
     # invalidIDs = Subject.at(subjectID).groupIDs - {collapsed_state.cls}
+    if not len(invalidIDs):
+        return
     for d in range(n_days_per_week):
         for p in range(n_slots_per_day):
             state = table[sec][d][p]
@@ -236,6 +238,7 @@ def hard_constraints(table: Table_T, dims, ndx, subjects, modified_states):
     collapsed_state = table[sec][day][slot]
     assert isinstance(collapsed_state, CollapsedState)
     to_be_propagated = []
+    # first_slot_diff_subj(table, dims, ndx, collapsed_state, modified_states)
     one_teacher_per_subject_per_section(table, dims, ndx, collapsed_state, modified_states)
     at_one_place_at_one_time(table, dims, ndx, collapsed_state, modified_states)
     max_subject_slots_per_week(table, dims, ndx, collapsed_state, modified_states)
@@ -249,8 +252,10 @@ def soft_constraints(table: Table_T, dims, ndx, subjects, modified_states):
     first_slot_diff_subj(table, dims, ndx, collapsed_state, modified_states)
 
 def pre_constraints(table: Table_T, dims, blocked_slots, teachers:list[Teacher], subjects:list[Subject], modified_states):
+    global to_be_propagated
+    to_be_propagated = []
     teachers_unavailable(table, dims, blocked_slots, teachers, modified_states)
     impossible_blocks(table, dims, blocked_slots, modified_states)
-            
+    remove_invalid_blocks(table,dims, modified_states)
 
     
