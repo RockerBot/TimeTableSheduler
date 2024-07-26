@@ -5,6 +5,7 @@ FacultyID_T = int
 Group_T = tuple['Teacher', 'Subject']
 GroupID_T = tuple[FacultyID_T,SubjectID_T]
 Table_T = list[list[list['SuperState']]]
+Index_T = tuple[int,int,int]
 
 ENTROPY_MAX = 1_000_000_000_000
 groupings: dict[GroupID_T, Group_T] = {}
@@ -18,10 +19,11 @@ def get_entropy(cls: GroupID_T, pos=-1):
     global groupings
     if cls == (0,0):
         return ENTROPY_MAX
-    grouping = groupings[cls]
+    faculty, subject = groupings[cls]
+    score = faculty.score * subject.score
     if pos == 0 and len(block_subjects[cls[1]])>1:
-        return grouping[0].score * grouping[1].score * 20
-    return grouping[0].score * grouping[1].score
+        return score * 20
+    return score
 
 class Subject:
     ID = 1 # subject's ID starts from 1, 0 is reserved
@@ -170,7 +172,18 @@ class SuperState(State):
         self.calc_entropy()
 
     def calc_entropy(self) -> None:
-        self.entropy = sum(get_entropy(cls, pos=self.pos) for cls in self.classes) * self.multiplier
+        if self.pos == 0:
+            entropy = sum(
+                get_entropy(cls, pos=0) / 
+                (20 if cls[1] and len(block_subjects[cls[1]])>1 else 1)
+                for cls in self.classes
+            )
+        else:
+            entropy = sum(
+                get_entropy(cls, pos=self.pos)
+                for cls in self.classes
+            )
+        self.entropy = entropy * self.multiplier
 
     def __hash__(self):
         return hash(f'SState{self.id}')
@@ -178,6 +191,7 @@ class SuperState(State):
 
     def __repr__(self):
         # return str(self.ID)        
-        return '_'.join(
+        # return '_'.join(
+        return ' '.join(
             f'{chr(65+cls[0])}{cls[1]}' for cls in sorted(self.classes)
         ) #+ f"_[{self.entropy}]"
