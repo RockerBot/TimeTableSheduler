@@ -7,7 +7,7 @@ def print_tt(tt, dims, elective_slots, blocked_slots, ndx=None):
     if ndx is not None:
         print(ndx)
     for section_i in range(n_sections):
-        print('\rSECTION', section_i + 1)
+        print('\rSECTION', section_i + 1, Section.at(section_i).subjects)
         for day_j in range(n_days_per_week):
             print("\r","-"*230,"\nday", day_j, end=':  ')
             for slot_k in range(n_slots_per_day):
@@ -56,6 +56,25 @@ def print_tt_faculty(tt, dims, faculty:list[Teacher]):
                 .replace('1'.center(faculty_padding),('X'*(faculty_padding-2)).center(faculty_padding)), map(str,row)
             )))
     
+
+def print_to_csv(tt, dims, elective_slots, blocked_slots, faculty:list[Teacher]):
+    n_sections, n_days_per_week, n_slots_per_day = dims
+    day_of_week = ['Monday','Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    with open('timetable_student.csv', 'w') as file:
+        for sec_i in range(n_sections):
+            file.write(f"SECTION {sec_i+1}\n")
+            for day_j in range(n_days_per_week):
+                file.write(f"{day_of_week[day_j]},")
+                file.write(', '.join(map(str, tt[sec_i][day_j])))
+                file.write("\n")
+
+    with open('timetable_faculty.csv', 'w') as file:
+        for fac in faculty:
+            file.write(f"{fac.name} {fac.id}\n")
+            for row in fac.availability:
+                file.write(', '.join(map(lambda x:str(x).replace(',','_'),row)))
+                file.write('\n')
+
 
 def score_faculty(blocked_slots, elective_slots, dims, elec_faculty:list[set[Teacher]], teachers:list[Teacher], sections:list[Section]):
     n_sections, n_days_per_week, n_slots_per_day = dims
