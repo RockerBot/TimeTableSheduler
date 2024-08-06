@@ -1,0 +1,93 @@
+n_days_per_week = 5
+n_slots_per_day = 9
+n_semesters = 2
+n_subjects = 5
+n_faculty = 25
+n_electives = 2
+n_sections = 10, 10
+DBMS = 6, 1
+MI = 6, 1
+SE = 6, 1
+DBMS_LAB = 2, 2
+MI_LAB = 2, 2
+elective1 = 4, 6, 3
+HCI
+DA
+IOT
+AC
+000000000
+000000000
+000111000
+000000000
+111000000
+elective2 = 3, 6, 3
+GTA
+CNS
+BD
+000000000
+111000000
+000000000
+000111000
+000000000
+Dr.Geetha Dayalan      = DBMS, DBMS_LAB, HCI
+Prof.Niveditha Kasturi = DBMS, DBMS_LAB
+Dr.Mannar Mannan       = DBMS, DBMS_LAB
+Prof.Smrithi           = DBMS, DBMS_LAB
+Prof.Shilpa S          = DBMS, DBMS_LAB
+Prof.Umme Hanni        = DBMS, DBMS_LAB
+Dr.Arti Arya           = MI, MI_LAB, GTA
+Dr.Pooja Agarwal       = MI, MI_LAB
+Dr.Alpha Vijayan       = MI, MI_LAB
+Dr.Prema               = MI, MI_LAB
+Prof.Kokila            = MI, MI_LAB
+Dr.Charu Kathuria      = MI, MI_LAB
+Prof.Sheela Devi       = SE
+Dr.Sudeepa Roy Dey     = DA, SE
+Prof.Animesh Giri      = BD, SE
+Prof.Rohith Vaidya     = SE
+Prof.Divya Ebenezer    = SE
+Prof.Lakshmeesha       = DA
+Dr.Vinodha             = IOT
+Dr.Annapurna D         = AC, CNS
+Dr.Sarasvathi V        = BD
+Prof.Sathyavani N L    = GTA
+Dr.Bharathi R          = BD, DA
+Dr.Prajwala T R        = DA
+Dr.Kamatchi Priya      = GTA
+sem1 = DBMS, MI, SE, DBMS_LAB, MI_LAB
+000000001
+000000001
+000000111
+000000001
+000000001
+sem2 = DBMS, MI, SE, DBMS_LAB, MI_LAB
+000000001
+000000001
+000000111
+000000001
+000000001
+Dr.Geetha Dayalan      = 000000000, 000000000, 000000000, 000000000, 000000000
+Dr.Arti Arya           = 000000000, 000000000, 000000000, 000000000, 000000000
+Prof.Sheela Devi       = 000000000, 000000000, 000000000, 000000000, 000000000
+Prof.Lakshmeesha       = 000000000, 000000000, 000000000, 000000000, 000000000
+Dr.Vinodha             = 000000000, 000000000, 000000000, 000000000, 000000000
+Dr.Annapurna D         = 000000000, 000000000, 000000000, 000000000, 000000000
+Dr.Sarasvathi V        = 000000000, 000000000, 000000000, 000000000, 000000000
+Prof.Sathyavani N L    = 000000000, 000000000, 000000000, 000000000, 000000000
+Prof.Niveditha Kasturi = 000000000, 000000000, 000000000, 000000000, 000000000
+Dr.Pooja Agarwal       = 000000000, 000000000, 000000000, 000000000, 000000000
+Dr.Bharathi R          = 000000000, 000000000, 000000000, 000000000, 000000000
+Dr.Prajwala T R        = 000000000, 000000000, 000000000, 000000000, 000000000
+Dr.Alpha Vijayan       = 000000000, 000000000, 000000000, 000000000, 000000000
+Dr.Sudeepa Roy Dey     = 000000000, 000000000, 000000000, 000000000, 000000000
+Prof.Animesh Giri      = 000000000, 000000000, 000000000, 000000000, 000000000
+Dr.Kamatchi Priya      = 000000000, 000000000, 000000000, 000000000, 000000000
+Dr.Mannar Mannan       = 000000000, 000000000, 000000000, 000000000, 000000000
+Prof.Rohith Vaidya     = 000000000, 000000000, 000000000, 000000000, 000000000
+Dr.Prema               = 000000000, 000000000, 000000000, 000000000, 000000000
+Prof.Smrithi           = 000000000, 000000000, 000000000, 000000000, 000000000
+Prof.Shilpa S          = 000000000, 000000000, 000000000, 000000000, 000000000
+Prof.Kokila            = 000000000, 000000000, 000000000, 000000000, 000000000
+Prof.Umme Hanni        = 000000000, 000000000, 000000000, 000000000, 000000000
+Dr.Charu Kathuria      = 000000000, 000000000, 000000000, 000000000, 000000000
+Prof.Divya Ebenezer    = 000000000, 000000000, 000000000, 000000000, 000000000
