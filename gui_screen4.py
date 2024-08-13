@@ -3,6 +3,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
 from kivy.uix.scrollview import ScrollView
 
@@ -16,6 +17,7 @@ default_btn_args = {
 
 def update_text_size(instance, value):
     instance.text_size = instance.size
+
 
 class CustomScrollView(ScrollView):
     def __init__(self, **kwargs):
@@ -36,6 +38,51 @@ class CustomScrollView(ScrollView):
         self.scrll_wdth = wdth
 
 
+class IndexButton(Button):
+    def __init__(self, val, **kwargs):
+        super().__init__(**kwargs)
+        self.index = val
+
+
+class SellectState(Popup):
+    def __init__(self, select_callback, teach_dict, **kwargs):
+        super().__init__(**kwargs)
+        self.title = 'Select a Faculty member'
+        self.size_hint = (0.9, 0.9)
+        self.teach_dict = teach_dict
+        self.select_callback = select_callback
+        self.teach = ''
+
+        self.layout = BoxLayout(orientation='vertical')
+        self.layout_list = BoxLayout(orientation='vertical')
+
+        self.scroll_view = ScrollView(size_hint=(1, 1))
+
+        cancel_button = Button(text='Cancel', size_hint_y=None, height=50)
+
+        cancel_button.bind(on_press=self.dismiss)
+        for teach in teach_dict.keys():
+            btn = Button(text=teach)
+            btn.bind(on_press=self.select_teacher)
+            self.layout_list.add_widget(btn)
+        self.scroll_view.add_widget(self.layout_list)
+        self.layout.add_widget(self.scroll_view)
+        self.layout.add_widget(cancel_button)
+        self.add_widget(self.layout)
+
+    def select_teacher(self, instance):
+        self.teach = instance.text
+        self.layout_list.clear_widgets()
+        for subj in self.teach_dict[instance.text]:
+            btn = Button(text=subj)
+            btn.bind(on_press=self.select_subject)
+            self.layout_list.add_widget(btn)
+
+    def select_subject(self, instance):
+        self.select_callback(f"{self.teach}, {instance.text}")
+        self.dismiss()
+
+
 class WFCScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -49,6 +96,7 @@ class WFCScreen(Screen):
 
         self.pass_data = None
         self.run_algo = None
+        self.modified_states = []
         self.sections = []
         self.layout = BoxLayout(orientation='vertical', spacing=10, padding=10)
         self.layout_nav = BoxLayout(orientation='horizontal', size_hint_y=None, height=dp(40))
@@ -92,19 +140,23 @@ class WFCScreen(Screen):
         self.subject_list = subject_list
         self.teacher_dict = teacher_dict
         self.run_algo = callback
+        self.modified_states = []
 
         self.scroll_view_sections.set_scrl_wdth(0.5/n_sections)
 
         self.sections = []
         for i in range(n_sections):
             grid = GridLayout(cols=self.n_slots, size_hint=(1, None), height=dp(95*self.n_days + 20))
-            for row in range(self.n_slots):
-                for col in range(self.n_days):
-                    btn = Button(text='',
-                                 size_hint_y=None, height=dp(95), padding=5,
-                                 halign='center', valign='middle')
+            for col in range(self.n_days):
+                for row in range(self.n_slots):
+                    btn = IndexButton(
+                        (i, col, row), text='',
+                        size_hint_y=None, height=dp(95), padding=5,
+                        halign='center', valign='middle'
+                    )
                     btn.text_size = btn.size
                     btn.bind(size=update_text_size)
+                    btn.bind(on_press=self.select_state)
                     grid.add_widget(btn)
             self.sections.append(grid)
 
@@ -132,3 +184,10 @@ class WFCScreen(Screen):
     def set_wfc_state(self, ndx, text):
         sec, day, slot = ndx
         self.sections[sec].children[-(day*self.n_slots + slot) - 1].text = text
+
+    def select_state(self, instance):
+        SellectState(lambda x:self.set_text(instance,x), self.teacher_dict).open()
+
+    def set_text(self, instance, text):
+        instance.text = text
+        self.modified_states.append((instance.index, text))

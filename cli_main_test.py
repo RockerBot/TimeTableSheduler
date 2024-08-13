@@ -1,6 +1,6 @@
 import time
 
-from states import Teacher, Subject, Section, Table_T
+from states import Teacher, Subject, Section, Table_T, SuperState, CollapsedState
 from helpfull import print_to_csv, print_tt, print_tt_stats, print_tt_faculty, setup
 import states
 import WFC
@@ -80,8 +80,8 @@ def main_loop(table, dims, elective_slots, blocked_slots, faculty, subjects, cal
             print_tt_faculty(table, dims, faculty)
             print_to_csv(table, dims, elective_slots, blocked_slots, faculty)
             break
-        print_tt(table, dims, elective_slots, blocked_slots, collapseable_slot)
-        print(end=f"\n{'*' * 100}{(iteration_count:=iteration_count+1)}\n")
+        # print_tt(table, dims, elective_slots, blocked_slots, collapseable_slot)
+        # print(end=f"\n{'*' * 100}{(iteration_count:=iteration_count+1)}\n")
         print(collapseable_slot, table[collapseable_slot[0]][collapseable_slot[1]][collapseable_slot[2]])
         # time.sleep(0.1)
         # input("next?: ")
@@ -162,8 +162,12 @@ def main(n_sections, n_days_per_week, n_slots_per_day,
         electives, elective_slots, 
         faculty_dict, 
         blocked_slots,
-        callback
+        callback,
+        queued_states
     ):
+    WFC.reset()
+    print('Queued States', queued_states)
+
     dims = n_sections, n_days_per_week, n_slots_per_day
     print("main")
     elec_faculty = []
@@ -189,7 +193,15 @@ def main(n_sections, n_days_per_week, n_slots_per_day,
     print(subjects)
     print(teachers)
     print(sections)
-    
+
+    for state_ndx in range(len(queued_states)):
+        ndx, st = queued_states[state_ndx]
+        fac_name, subj_name = map(str.strip,st.strip().split(','))
+        for fac in teachers:
+            if fac.name == fac_name:
+                queued_states[state_ndx] = ndx, (fac.id,subjects_dict[subj_name][0].id)
+                break
+
     table: Table_T = setup(
         dims,
         blocked_slots, elective_slots, elec_faculty,
@@ -213,6 +225,14 @@ def main(n_sections, n_days_per_week, n_slots_per_day,
     for teacher in teachers:
         print(teacher.availability, teacher.name)
     print(table[0][0][0].classes)
+
+    for ndx,st in queued_states:
+        if not isinstance(table[ndx[0]][ndx[1]][ndx[2]], SuperState):
+            continue
+        WFC.collapse_state(table, dims, ndx, st, subjects, callback)
+        if st != (0, 0):
+            WFC.propagate_constraints(table, dims, ndx, subjects, callback)
+
     print()
     print_tt(table, dims, elective_slots, blocked_slots)
     print("="*100)
@@ -223,7 +243,7 @@ def main(n_sections, n_days_per_week, n_slots_per_day,
 if __name__ == '__main__':
     import os
 
-    # file_name = 'config1.txt'
-    file_name = 'config_test.txt'
+    file_name = 'config1.txt'
+    # file_name = 'config_test.txt'
     assert file_name in os.listdir(), "file not present"
-    main(*input_file(file_name), lambda x:None)
+    main(*input_file(file_name), lambda x:None, [])

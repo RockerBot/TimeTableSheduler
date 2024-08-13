@@ -1,15 +1,19 @@
 n_days_per_week = 5
 n_slots_per_day = 9
 n_semesters = 2
-n_subjects = 5
+n_subjects = 9
 n_faculty = 25
 n_electives = 2
-n_sections = 10, 10
+n_sections = 5, 5
 DBMS = 6, 1
 MI = 6, 1
-SE = 6, 1
 DBMS_LAB = 2, 2
 MI_LAB = 2, 2
+SE = 6, 1
+DSA = 6, 1
+AFLL = 6, 1
+DSA_LAB = 2, 2
+AFLL_LAB = 2, 2
 elective1 = 4, 6, 3
 HCI
 DA
@@ -32,15 +36,15 @@ BD
 Dr.Geetha Dayalan      = DBMS, DBMS_LAB, HCI
 Prof.Niveditha Kasturi = DBMS, DBMS_LAB
 Dr.Mannar Mannan       = DBMS, DBMS_LAB
-Prof.Smrithi           = DBMS, DBMS_LAB
-Prof.Shilpa S          = DBMS, DBMS_LAB
-Prof.Umme Hanni        = DBMS, DBMS_LAB
+Prof.Smrithi           = DSA, DSA_LAB
+Prof.Shilpa S          = DSA, DSA_LAB
+Prof.Umme Hanni        = DSA, DSA_LAB
 Dr.Arti Arya           = MI, MI_LAB, GTA
 Dr.Pooja Agarwal       = MI, MI_LAB
 Dr.Alpha Vijayan       = MI, MI_LAB
-Dr.Prema               = MI, MI_LAB
-Prof.Kokila            = MI, MI_LAB
-Dr.Charu Kathuria      = MI, MI_LAB
+Dr.Prema               = AFLL, AFLL_LAB
+Prof.Kokila            = AFLL, AFLL_LAB
+Dr.Charu Kathuria      = AFLL, AFLL_LAB
 Prof.Sheela Devi       = SE
 Dr.Sudeepa Roy Dey     = DA, SE
 Prof.Animesh Giri      = BD, SE
@@ -55,12 +59,14 @@ Dr.Bharathi R          = BD, DA
 Dr.Prajwala T R        = DA
 Dr.Kamatchi Priya      = GTA
 sem1 = DBMS, MI, SE, DBMS_LAB, MI_LAB
+sem1_electives = 1, 2
 000000001
 000000001
 000000111
 000000001
 000000001
-sem2 = DBMS, MI, SE, DBMS_LAB, MI_LAB
+sem2 = DSA, AFLL, SE, DSA_LAB, AFLL_LAB
+sem2_electives = 1, 2
 000000001
 000000001
 000000111

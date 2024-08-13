@@ -195,3 +195,20 @@ class SuperState(State):
         return ' '.join(
             f'{chr(65+cls[0])}{cls[1]}' for cls in sorted(self.classes)
         ) #+ f"_[{self.entropy}]"
+
+
+def reset():
+    global ENTROPY_MAX, groupings, block_subjects, only_block_subjects, block_grpIDs
+    ENTROPY_MAX = 1_000_000_000_000
+    groupings = {}
+    block_subjects = {}
+    only_block_subjects = []
+    block_grpIDs = set()
+
+    Subject.ID = 1
+    Subject.subject_list = []
+    Teacher.ID = 1
+    Teacher.teacher_list = []
+    Section.ID = 1
+    Section.section_list = []
+    SuperState.ID = 0

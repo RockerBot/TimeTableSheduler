@@ -1,5 +1,6 @@
 import threading
 import time
+import copy
 
 from kivy.config import Config
 Config.set('input', 'mouse', 'mouse,disable_multitouch')
@@ -34,6 +35,8 @@ def run_algo(self):
     #     time.sleep(1)
     if len(elective_nms):
         for i in range(n_electives):
+            if f'elective{i+1}' in elective_nms[i]:
+                continue
             elective_nms[i].append(f'elective{i+1}')
     else:
         for i in range(n_electives):
@@ -55,12 +58,13 @@ def run_algo(self):
         n_sections, n_days, n_slots,
         len(subject_list), len(teacher_list),
         (n_electives, 6, 3),
-        subject_dict,
+        {k: subject_dict[k] for k in subject_dict.keys()},
         [elective_nms[i] for i in range(n_electives)],
-        elective_slots,
-        teacher_dict,
-        blocked_slots,
-        self.set_states
+        copy.deepcopy(elective_slots),
+        {k: teacher_dict[k] for k in teacher_dict.keys()},
+        copy.deepcopy(blocked_slots),
+        self.set_states,
+        copy.deepcopy(self.modified_states)
     ))
     thrd.start()
     pass

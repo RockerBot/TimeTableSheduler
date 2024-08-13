@@ -258,4 +258,7 @@ def pre_constraints(table: Table_T, dims, blocked_slots, teachers:list[Teacher],
     impossible_blocks(table, dims, blocked_slots, modified_states)
     remove_invalid_blocks(table,dims, modified_states)
 
-    
+
+def reset():
+    global to_be_propagated
+    to_be_propagated = []

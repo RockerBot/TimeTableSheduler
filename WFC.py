@@ -92,3 +92,8 @@ def init(table, dims, blocked_slots, teachers, subjects, callback):
     modified_states:set[tuple[Index_T, SuperState]] = set()
     constraints.pre_constraints(table, dims, blocked_slots, teachers, subjects, modified_states)
     calculate_state_entropy(modified_states, callback)
+
+
+def reset():
+    states.reset()
+    constraints.reset()

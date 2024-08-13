@@ -1,8 +1,8 @@
 from typing import Callable
 
-from states import SuperState, CollapsedState, Teacher, Subject, Section, Table_T, GroupID_T, Index_T
-import states
-import constraints
+from states2 import SuperState, CollapsedState, Teacher, Subject, Section, Table_T, GroupID_T, Index_T
+import states2 as states
+import constraints2 as constraints
 import numpy as np
 import random
 
@@ -84,11 +84,11 @@ def iterate(table, dims, subjects, callback):
         propagate_constraints(table, dims, ndx, subjects, callback)
     return ndx
 
-def init(table, dims, blocked_slots, teachers, subjects, callback):
+def init(table, dims, n_semesters, n_sections_per_semester, blocked_slots, teachers, subjects, callback):
     states.block_grpIDs = set()
     for subj in states.only_block_subjects:
         states.block_grpIDs |= subj.groupIDs
     
     modified_states:set[tuple[Index_T, SuperState]] = set()
-    constraints.pre_constraints(table, dims, blocked_slots, teachers, subjects, modified_states)
+    constraints.pre_constraints(table, dims, n_semesters, n_sections_per_semester, blocked_slots, teachers, subjects, modified_states)
     calculate_state_entropy(modified_states, callback)

@@ -1,0 +1,60 @@
+SECTION 1
+Monday,(J MI), 0, (P SE), (P SE), 0, (P SE), (B DBMS), (J MI), 0
+Tuesday,0, 0, 0, (C DBMS_LAB0), (C DBMS_LAB1), (B DBMS), (P SE), (P SE), 0
+Wednesday,(P SE), (J MI), (J MI), 0, 0, 0, 0, 0, 0
+Thursday,(B DBMS), 0, (J MI), 0, 0, 0, (K MI_LAB0), (K MI_LAB1), 0
+Friday,0, 0, 0, (J MI), (B DBMS), (B DBMS), (B DBMS), 0, 0
+SECTION 2
+Monday,(Q SE), 0, (L MI), (F DBMS), (F DBMS), (Q SE), (L MI), (Q SE), 0
+Tuesday,0, 0, 0, (Q SE), (Q SE), (L MI), (F DBMS), 0, 0
+Wednesday,(L MI), (G DBMS_LAB0), (G DBMS_LAB1), 0, 0, 0, 0, 0, 0
+Thursday,(F DBMS), (F DBMS), (F DBMS), 0, 0, 0, (I MI_LAB0), (I MI_LAB1), 0
+Friday,0, 0, 0, (Q SE), (L MI), (L MI), 0, 0, 0
+SECTION 3
+Monday,(H MI), (P SE), 0, (H MI), (P SE), (D DBMS), (H MI), 0, 0
+Tuesday,0, 0, 0, (D DBMS_LAB0), (D DBMS_LAB1), 0, (D DBMS), (H MI), 0
+Wednesday,(D DBMS), (D DBMS), (D DBMS), 0, 0, 0, 0, 0, 0
+Thursday,(P SE), (L MI_LAB0), (L MI_LAB1), 0, 0, 0, (D DBMS), (H MI), 0
+Friday,0, 0, 0, (P SE), (P SE), (H MI), 0, (P SE), 0
+SECTION 4
+Monday,(P SE), 0, 0, (L MI), (L MI), (L MI), (P SE), (L MI), 0
+Tuesday,0, 0, 0, (F DBMS), (F DBMS), (P SE), 0, 0, 0
+Wednesday,(F DBMS), (C DBMS_LAB0), (C DBMS_LAB1), 0, 0, 0, 0, 0, 0
+Thursday,(L MI), (M MI_LAB0), (M MI_LAB1), 0, 0, 0, (F DBMS), (P SE), 0
+Friday,0, 0, 0, (F DBMS), (F DBMS), (P SE), (P SE), (L MI), 0
+SECTION 5
+Monday,(O SE), (B DBMS), 0, (O SE), 0, (B DBMS), (J MI), (B DBMS), 0
+Tuesday,0, 0, 0, (J MI), (J MI), (O SE), (B DBMS), (O SE), 0
+Wednesday,(B DBMS), (F DBMS_LAB0), (F DBMS_LAB1), 0, 0, 0, 0, 0, 0
+Thursday,(J MI), 0, (O SE), 0, 0, 0, (J MI), 0, 0
+Friday,0, 0, 0, (H MI_LAB0), (H MI_LAB1), (J MI), (O SE), (B DBMS), 0
+SECTION 6
+Monday,(R SE), 0, (R SE), (R SE), 0, (C DBMS), (I MI), (R SE), 0
+Tuesday,0, 0, 0, (G DBMS_LAB0), (G DBMS_LAB1), (C DBMS), (R SE), (I MI), 0
+Wednesday,(I MI), (K MI_LAB0), (K MI_LAB1), 0, 0, 0, 0, 0, 0
+Thursday,(C DBMS), (R SE), (I MI), 0, 0, 0, (C DBMS), (C DBMS), 0
+Friday,0, 0, 0, (I MI), (I MI), (C DBMS), 0, 0, 0
+SECTION 7
+Monday,(D DBMS), (O SE), 0, 0, (H MI), (H MI), (D DBMS), 0, 0
+Tuesday,0, 0, 0, (O SE), (H MI), (D DBMS), (O SE), 0, 0
+Wednesday,(H MI), (L MI_LAB0), (L MI_LAB1), 0, 0, 0, 0, 0, 0
+Thursday,(O SE), (H MI), (D DBMS), 0, 0, 0, (O SE), (O SE), 0
+Friday,0, 0, 0, (D DBMS_LAB0), (D DBMS_LAB1), (D DBMS), (D DBMS), (H MI), 0
+SECTION 8
+Monday,(L MI), (D DBMS), (D DBMS), 0, (D DBMS), (R SE), (R SE), (D DBMS), 0
+Tuesday,0, 0, 0, (L MI), (L MI), (R SE), (L MI), (D DBMS), 0
+Wednesday,(R SE), (M MI_LAB0), (M MI_LAB1), 0, 0, 0, 0, 0, 0
+Thursday,(D DBMS), (C DBMS_LAB0), (C DBMS_LAB1), 0, 0, 0, (L MI), 0, 0
+Friday,0, 0, 0, (L MI), (R SE), (R SE), 0, 0, 0
+SECTION 9
+Monday,(B DBMS), (H MI), (H MI), 0, (O SE), (O SE), (O SE), 0, 0
+Tuesday,0, 0, 0, (B DBMS), (B DBMS), (H MI), (H MI), 0, 0
+Wednesday,(O SE), (H MI_LAB0), (H MI_LAB1), 0, 0, 0, 0, 0, 0
+Thursday,(H MI), 0, (B DBMS), 0, 0, 0, (B DBMS), (B DBMS), 0
+Friday,0, 0, 0, (C DBMS_LAB0), (C DBMS_LAB1), (O SE), (H MI), (O SE), 0
+SECTION 10
+Monday,(F DBMS), (J MI), (J MI), (J MI), 0, (F DBMS), (F DBMS), (F DBMS), 0
+Tuesday,0, 0, 0, (R SE), (R SE), (F DBMS), (J MI), (R SE), 0
+Wednesday,(J MI), (I MI_LAB0), (I MI_LAB1), 0, 0, 0, 0, 0, 0
+Thursday,(R SE), (J MI), (R SE), 0, 0, 0, (R SE), 0, 0
+Friday,0, 0, 0, (G DBMS_LAB0), (G DBMS_LAB1), (F DBMS), 0, 0, 0

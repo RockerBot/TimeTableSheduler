@@ -3,13 +3,16 @@ from colorama import Fore
 
 def print_tt(tt, dims, elective_slots, blocked_slots, ndx=None):
     n_sections, n_days_per_week, n_slots_per_day = dims
-    padding = 74#23#10  # len(''.join(subjects.keys()))+len(str(MAX_ENTROPY))+3-3
+    padding = 23#74#23#10  # len(''.join(subjects.keys()))+len(str(MAX_ENTROPY))+3-3
     if ndx is not None:
         print(ndx)
     for section_i in range(n_sections):
         print('\rSECTION', section_i + 1, Section.at(section_i).subjects)
         for day_j in range(n_days_per_week):
-            print("\r","-"*230,"\nday", day_j, end=':  ')
+            print(
+                "\r",
+                # "-"*230,"\n"
+                "day", day_j, end=':  ')
             for slot_k in range(n_slots_per_day):
                 state = tt[section_i][day_j][slot_k]
                 clr = ('\033[39m', '\033[92m')[isinstance(state, CollapsedState)]
@@ -24,7 +27,7 @@ def print_tt(tt, dims, elective_slots, blocked_slots, ndx=None):
                     print(f"{Fore.RED}{state:-{padding}}\033[39m", end=' ')
                 else:
                     print(f"{clr}{state:-{padding}}\033[39m", end=' ')
-                if slot_k%3==2:
+                if slot_k==8:#slot_k%3==2:
                     print(end='\n        ')
     print(end='\r')
 
@@ -65,7 +68,7 @@ def print_to_csv(tt, dims, elective_slots, blocked_slots, faculty:list[Teacher])
             file.write(f"SECTION {sec_i+1}\n")
             for day_j in range(n_days_per_week):
                 file.write(f"{day_of_week[day_j]},")
-                file.write(', '.join(map(str, tt[sec_i][day_j])))
+                file.write(', '.join(map(lambda x:str(x).replace(',',''), tt[sec_i][day_j])))
                 file.write("\n")
 
     with open('timetable_faculty.csv', 'w') as file:
@@ -146,3 +149,117 @@ def setup(dims, blocked_slots, elective_slots, elec_faculty, teachers:list[Teach
 
     return table
     
+
+# def input_file(file_name):
+#     with open(file_name, 'r') as file:
+#         n_days_per_week = int(file.readline().split('=')[-1])
+#         n_slots_per_day = int(file.readline().split('=')[-1])
+#         n_semesters     = int(file.readline().split('=')[-1])
+#         n_subjects      = int(file.readline().split('=')[-1])
+#         n_faculty       = int(file.readline().split('=')[-1])
+#         n_electives     = int(file.readline().split('=')[-1])
+        
+#         n_sections      = (*map(int,file.readline().split('=')[-1].split(',')),) #tuple(int,int,...) tuple of no of sections per semester
+
+#         # subjects
+#         subjects_dict = {}
+#         for _ in range(n_subjects):
+#             subj_name, subj_info= map(str.strip, file.readline().strip().split('='))
+#             subjects_dict[subj_name] = [*map(int, subj_info.split(','))]
+        
+#         #electives
+#         electives = []
+#         elective_slots = []
+#         for i in range(n_electives):
+#             n_subjs = [*map(int,file.readline().split('=')[-1].strip().split(','))]
+#             electives.append((
+#                 [file.readline().strip() for _ in range(n_subjs[0])],
+#                 n_subjs[1:]
+#             ))
+#             elective_slots.append(
+#                 [ [*map(int,file.readline().strip())] for _ in range(n_days_per_week)]
+#             )
+        
+#         #faculty
+#         faculty_dict = {}
+#         for _ in range(n_faculty):
+#             faculty, subjs = map(str.strip, file.readline().split('='))
+#             faculty_dict[faculty] =[*map(str.strip, subjs.split(','))]
+        
+#         # blocked_slolts and semester subjects
+#         semester_subjects_list = []
+#         blocked_slots = []
+#         for i in range(n_semesters):
+#             subjs = file.readline().split('=')[-1]
+#             semester_subjects_list.append(
+#                 [*map(str.strip, subjs.split(','))]
+#             )
+#             blocked_slots.append( [ 
+#                 [*map(int,file.readline().strip())]
+#                 for _ in range(n_days_per_week)
+#             ] )
+
+#         #faculty availability
+#         faculty_availability_dict = {}
+#         for _ in range(n_faculty):
+#             faculty, availability = map(str.strip, file.readline().split('='))
+#             faculty_availability_dict[faculty] = [
+#                 [*map(int, day.strip())]
+#                 for day in availability.split(',')
+#             ]
+
+
+#     #TODO blocked_slots --> blocked_slots[sem]
+#     #TODO n_sections --> n_sections[sem]
+
+#     #TODO new --> semester_subjects_list, n_semesters, faculty_availability_dict
+#     print(f"""
+#         {n_days_per_week=}
+#         {n_slots_per_day=}
+#         {n_semesters=}
+#         {n_subjects=}
+#         {n_faculty=}
+#         {n_electives=}
+#         {n_sections=}
+
+#         {subjects_dict=}
+#         {electives=}
+#     """)
+#     print("ElectiveSlots")
+#     for elec_slots in elective_slots:
+#         print('-'*n_slots_per_day)
+#         for row in elec_slots:
+#             print(''.join(map(str,row)))
+#     print("faculty dictionary")
+#     for k,v in faculty_dict.items():
+#         print(k,v)
+#     print("Semester subjects")
+#     for i,subjs in enumerate(semester_subjects_list):
+#         print(f"Semester{i+1}",subjs)
+#     print("Blocked slots")
+#     for i in range(n_semesters):
+#         for row in blocked_slots[i]:
+#             print(''.join(map(str,row)))
+#     print("Teacher Availability")
+#     for k,v in faculty_availability_dict.items():
+#         print(k,v)
+    
+#     return (
+#         n_days_per_week, 
+#         n_slots_per_day, 
+#         n_semesters,
+#         n_sections, #n_sections[0]
+#         n_subjects, 
+#         n_faculty, 
+#         n_electives, 
+#         subjects_dict, 
+#         electives,
+#         elective_slots, 
+#         faculty_dict, 
+#         semester_subjects_list,
+#         blocked_slots, #blocked_slots[0]
+#         faculty_availability_dict
+#     )
+
+# if __name__ == '__main__':
+#     input_file('config2.txt')

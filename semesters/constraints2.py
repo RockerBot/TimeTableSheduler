@@ -1,5 +1,5 @@
-from states import CollapsedState, SuperState, Teacher, Subject, Section, Table_T, GroupID_T, SubjectID_T, FacultyID_T, Index_T
-import states
+from states2 import CollapsedState, SuperState, Teacher, Subject, Section, Table_T, GroupID_T, SubjectID_T, FacultyID_T, Index_T
+import states2 as states
 
 to_be_propagated:list[tuple[
     tuple[int,int,int],
@@ -82,8 +82,8 @@ def teachers_unavailable(table: Table_T, dims, blocked_slots, teachers:list[Teac
     n_sections, n_days_per_week, n_slots_per_day = dims
     for day_i in range(n_days_per_week):
         for slot_j in range(n_slots_per_day):
-            if blocked_slots[day_i][slot_j]:
-                continue
+            # if blocked_slots[][day_i][slot_j]:
+            #     continue
             invalidIDs = set()
             for faculty in teachers:
                 val = faculty.availability[day_i][slot_j]
@@ -97,7 +97,7 @@ def teachers_unavailable(table: Table_T, dims, blocked_slots, teachers:list[Teac
                     continue
                 remove_invalids(state, invalidIDs, (sec_k,day_i,slot_j), modified_states)
 
-def impossible_blocks(table: Table_T, dims, blocked_slots, modified_states):
+def impossible_blocks(table: Table_T, dims, n_semesters, n_sections_per_semester, blocked_slots, modified_states):
     """
     removes block states if the entire block can not be placed at that location
     due to 'blocked_slots' and slot index = 0 or -1
@@ -111,19 +111,27 @@ def impossible_blocks(table: Table_T, dims, blocked_slots, modified_states):
                 continue
             invalidIDs_1 |= subj.groupIDs # blksubjs at the end and begining slots
         for day_j in range(n_days_per_week):
-            if blocked_slots[day_j][slot_k]:
-                continue
-            invalidIDs_2 = set()|invalidIDs_1
-            for subj in states.only_block_subjects:
-                min_slot = max(0,slot_k - subj.blk_index)
-                max_slot = min(n_slots_per_day, slot_k + subj.min_blk_sz - subj.blk_index)
-                if any(blocked_slots[day_j][min_slot: max_slot]):
-                    invalidIDs_2 |= subj.groupIDs
-            for section_i in range(n_sections):
-                state = table[section_i][day_j][slot_k]
-                if not isinstance(state, SuperState):
+            # if blocked_slots[day_j][slot_k]:
+            #     continue
+            n_sec_ndx = 0
+            for sem_l in range(n_semesters):
+                n_sec_ndx += n_sections_per_semester[sem_l]
+                if blocked_slots[sem_l][day_j][slot_k]:
                     continue
-                remove_invalids(state, invalidIDs_2, (section_i,day_j,slot_k), modified_states)
+
+                invalidIDs_2 = set()|invalidIDs_1
+                for subj in states.only_block_subjects:
+                    min_slot = max(0,slot_k - subj.blk_index)
+                    max_slot = min(n_slots_per_day, slot_k + subj.min_blk_sz - subj.blk_index)
+                    if any(blocked_slots[sem_l][day_j][min_slot: max_slot]):
+                        invalidIDs_2 |= subj.groupIDs
+
+                for section_i in range(n_sections_per_semester[sem_l]):
+                    sec_ndx = n_sec_ndx - n_sections_per_semester[sem_l] + section_i
+                    state = table[sec_ndx][day_j][slot_k]
+                    if not isinstance(state, SuperState):
+                        continue
+                    remove_invalids(state, invalidIDs_2, (section_i,day_j,slot_k), modified_states)
 
 
 
@@ -251,11 +259,11 @@ def soft_constraints(table: Table_T, dims, ndx, subjects, modified_states):
     assert isinstance(collapsed_state, CollapsedState)
     first_slot_diff_subj(table, dims, ndx, collapsed_state, modified_states)
 
-def pre_constraints(table: Table_T, dims, blocked_slots, teachers:list[Teacher], subjects:list[Subject], modified_states):
+def pre_constraints(table: Table_T, dims, n_semesters, n_sections_per_semester, blocked_slots, teachers:list[Teacher], subjects:list[Subject], modified_states):
     global to_be_propagated
     to_be_propagated = []
     teachers_unavailable(table, dims, blocked_slots, teachers, modified_states)
-    impossible_blocks(table, dims, blocked_slots, modified_states)
+    impossible_blocks(table, dims, n_semesters, n_sections_per_semester, blocked_slots, modified_states)
     remove_invalid_blocks(table,dims, modified_states)
 
     

@@ -43,8 +43,8 @@ class ListEntry(BoxLayout):
             self.scroll_view,
             to=self
         )
-        add_colour(self, (1, 0, 0, 1))
-        add_colour(self.scroll_view, (1, 1, 0, 1))
+        # add_colour(self, (1, 0, 0, 1))
+        # add_colour(self.scroll_view, (1, 1, 0, 1))
 
     def get_text(self):
         return self.label.text
@@ -101,9 +101,9 @@ class TeacherScreen(Screen):
 
     def goto_next_screen(self, instance):
         teachers = {}
-        for i, child in enumerate(self.layout_teachers.children):
-            if i == 0:
-                continue
+        for child in self.layout_teachers.children:
+            # if i == 0:
+            #     continue
             teachers[child.get_text()] = child.get_subjects()
         print(teachers)
         self.pass_data(teachers)

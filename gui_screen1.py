@@ -61,7 +61,7 @@ class ListEntry(BoxLayout):
                 self.button,
                 to=self
             )
-        add_colour(self, (1,0,0,1))
+        # add_colour(self, (1,0,0,1))
 
     def remove_element(self, instance):
         self.parent.remove_widget(self)
